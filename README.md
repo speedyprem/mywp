@@ -1,10 +1,6 @@
 # WordPress plugin or theme development with Docker Compose
 
-[![Build status][build-status]][travis-ci]
-
-This is an example repo for how one might wire up Docker Compose for local
-plugin or theme development. It provides WordPress, MariaDB, WP-CLI, PHPUnit,
-and the WordPress unit testing suite.
+It provides WordPress, MariaDB, WP-CLI, PHPUnit, and the WordPress unit testing suite.
 
 
 ## Set up
@@ -15,10 +11,10 @@ and the WordPress unit testing suite.
    `services/wordpress/volumes` section of `docker-compose.yml` so that it
    syncs to the appropriate directory.
 
-3. Add `project.test` to `/etc/hosts`, e.g.:
+3. Add `mywp.test` to `/etc/hosts`, e.g.:
 
    ```
-   127.0.0.1 localhost project.test
+   127.0.0.1 localhost mywp.test
    ```
 
 
@@ -95,43 +91,3 @@ Now you are ready to run PHPUnit. Repeat this command as necessary:
 ```sh
 docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit
 ```
-
-
-## Changing the hostname
-
-You can change the hostname from the default `project.test` by adding a `.env`
-file at the project root and defining the `DOCKER_DEV_DOMAIN` environment
-variable:
-
-```
-DOCKER_DEV_DOMAIN=myproject.test
-```
-
-
-## Seed MariaDB database
-
-The `mariadb` image supports initializing the database with content by mounting
-a volume to the database container at `/docker-entrypoint-initdb.d`. See the
-[MariaDB Docker docs][mariadb-docs] for more information.
-
-
-## Troubleshooting
-
-If your stack is not responding, the most likely cause is that a container has
-stopped or failed to start. Check to see if all of the containers are "Up":
-
-```
-docker-compose ps
-```
-
-If not, inspect the logs for that container, e.g.:
-
-```
-docker-compose logs wordpress
-```
-
-
-[build-status]: https://travis-ci.org/chriszarate/docker-compose-wordpress.svg?branch=master
-[travis-ci]: https://travis-ci.org/chriszarate/docker-compose-wordpress
-[docker-compose]: https://docs.docker.com/compose/
-[mariadb-docs]: https://github.com/docker-library/docs/tree/master/mariadb#initializing-a-fresh-instance
