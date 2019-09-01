@@ -1,39 +1,56 @@
-version: '3.1'
+version: "3"
 
 services:
-  mysql:
-    image: mysql:5.7
-    restart: always
-    ports:
-    - 8081:3306
-    environment:
-      MYSQL_USER: wordpress
-      MYSQL_ROOT_PASSWORD: wordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_PASSWORD: wordpress
-    networks:
-    - backend
-
   wordpress:
+    image: "wordpress:${WP_VERSION:-5.2.1}-php${PHP_VERSION:-7.3}-apache"
+    environment:
+      VIRTUAL_HOST: "${DOCKER_DEV_DOMAIN:-mywp.test}"
+      WORDPRESS_DB_HOST: "mysql"
+      WORDPRESS_DB_NAME: "wordpress"
+      WORDPRESS_DB_PASSWORD: ""
+      WORDPRESS_DB_USER: "root"
     depends_on:
-    - mysql
-    image: wordpress:latest
-    ports:
-    - 2121:80
-    restart: always
+      - "mysql"
+    networks:
+      - "front"
+      - "back"
     volumes:
     - ./wp-content:/var/www/html/wp-content
     working_dir: /var/www/html
+  wp-cli:
+    image: "wordpress:cli-${WP_CLI_VERSION:-2.2.0}-php${PHP_VERSION:-7.3}"
     environment:
-      WORDPRESS_DB_HOST: mysql:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
+      - APACHE_RUN_USER="www-data"
+      - APACHE_RUN_GROUP="www-data"
+    depends_on:
+      - "mysql"
     networks:
-    - frontend
-    - backend
+      - "back"
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+      - "./bin/install-wp.sh:/usr/local/bin/install-wp:ro"
+  mysql:
+    image: "mariadb:10.2"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: "wordpress"
+      MYSQL_ROOT_PASSWORD: ""
+    networks:
+      - "back"
+  proxy:
+    image: "jwilder/nginx-proxy:alpine"
+    ports:
+      - "80:80"
+    networks:
+      front:
+        aliases:
+          - "${DOCKER_DEV_DOMAIN:-mywp.test}"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
 
 networks:
-  backend:
-  frontend:
-    external:
-      name: proxy
+  front: {}
+  back: {}
+
+volumes:
+  wp: {}

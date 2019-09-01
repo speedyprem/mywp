@@ -3,3 +3,6 @@
 # editor code
 .vscode/
 .idea/
+
+# wp-content code
+wp-content
