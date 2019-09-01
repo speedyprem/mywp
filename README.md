@@ -1,4 +1,4 @@
-# WordPress plugin or theme development with Docker Compose
+# Develop plugin or theme with Docker Compose
 
 It provides WordPress, MariaDB, WP-CLI suite for WordPress development.
 
