@@ -11,6 +11,3 @@ wp core install \
 
 # Update permalink structure.
 wp option update permalink_structure "/%year%/%monthnum%/%postname%/" --skip-themes --skip-plugins
-
-# Activate plugin.
-wp plugin activate my-plugin

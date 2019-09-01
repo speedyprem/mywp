@@ -1,7 +1,6 @@
 # WordPress plugin or theme development with Docker Compose
 
-It provides WordPress, MariaDB, WP-CLI, PHPUnit, and the WordPress unit testing suite.
-
+It provides WordPress, MariaDB, WP-CLI suite for WordPress development.
 
 ## Set up
 
@@ -36,19 +35,17 @@ specific container, use `docker-compose logs [container]`, e.g.:
 docker-compose logs wordpress
 ```
 
-Please refer to the [Docker Compose documentation][docker-compose] for more
-information about starting, stopping, and interacting with your environment.
-
-
 ## Install WordPress
+
+Run below command to install WordPress.
 
 ```sh
 docker-compose run --rm wp-cli install-wp
 ```
 
-Log in to `http://project.test/wp-admin/` with `wordpress` / `wordpress`.
+Log in to `http://mywp.test/wp-admin/` with `wordpress` / `wordpress`.
 
-Alternatively, you can navigate to `http://project.test/` and manually perform
+Alternatively, you can navigate to `http://mywp.test/` and manually perform
 the famous five-second install.
 
 
@@ -58,36 +55,4 @@ You will probably want to [create a shell alias][3] for this:
 
 ```sh
 docker-compose run --rm wp-cli wp [command]
-```
-
-
-## Running tests (PHPUnit)
-
-The tests in this example repo were generated with WP-CLI, e.g.:
-
-```sh
-docker-compose run --rm wp-cli wp scaffold plugin-tests my-plugin
-```
-
-This is not required, however, and you can bring your own test scaffold. The
-important thing is that you provide a script to install your test dependencies,
-and that these dependencies are staged in `/tmp`.
-
-The testing environment is provided by a separate Docker Compose file
-(`docker-compose.phpunit.yml`) to ensure isolation. To use it, you must first
-start it, then manually run your test installation script. These commands work
-for this example repo, but may not work for you if you use a different test
-scaffold.
-
-Note that, in the PHPUnit container, your code is mapped to `/app`.
-
-```sh
-docker-compose -f docker-compose.yml -f docker-compose.phpunit.yml up -d
-docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /app/bin/install-wp-tests.sh wordpress_test root '' mysql_phpunit latest true
-```
-
-Now you are ready to run PHPUnit. Repeat this command as necessary:
-
-```sh
-docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit phpunit
 ```
