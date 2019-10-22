@@ -13,9 +13,8 @@ It provides WordPress, MariaDB, WP-CLI suite for WordPress development.
 3. Add `mywp.test` to `/etc/hosts`, e.g.:
 
    ```
-   127.0.0.1 localhost mywp.test
+   127.0.0.1 mywp.test
    ```
-
 
 ## Start environment
 
@@ -35,15 +34,7 @@ specific container, use `docker-compose logs [container]`, e.g.:
 docker-compose logs wordpress
 ```
 
-## Install WordPress
-
-Run below command to install WordPress.
-
-```sh
-docker-compose run --rm wp-cli install-wp
-```
-
-Log in to `http://mywp.test/wp-admin/` with `wordpress` / `wordpress`.
+Open `http://mywp.test/` and follow the steps to install WordPress.
 
 Alternatively, you can navigate to `http://mywp.test/` and manually perform
 the famous five-second install.
