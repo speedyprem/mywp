@@ -10,4 +10,4 @@ wp core install \
   --skip-email
 
 # Update permalink structure.
-wp option update permalink_structure "/%year%/%monthnum%/%postname%/" --skip-themes --skip-plugins
+wp option update permalink_structure "/%postname%/" --skip-themes --skip-plugins
