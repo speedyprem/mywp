@@ -2,10 +2,10 @@
 
 # Install WordPress.
 wp core install \
-  --title="Project" \
+  --title="Just another WordPress project" \
   --admin_user="wordpress" \
   --admin_password="wordpress" \
-  --admin_email="admin@example.com" \
+  --admin_email="admin@mywp.test" \
   --url="http://mywp.test" \
   --skip-email
 
