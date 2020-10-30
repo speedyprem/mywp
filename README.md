@@ -34,4 +34,9 @@ specific container, use `docker-compose logs [container]`, e.g.:
 docker-compose logs wordpress
 ```
 
+### WordPress site
+
 Open `http://mywp.test/` in your browser and follow the famous five-second WordPress install.
+
+### PHPMyadmin
+To access the PHPMyadmin visit: `http://mywp.test:8080` and use username as `root`.
