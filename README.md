@@ -34,6 +34,10 @@ specific container, use `docker-compose logs [container]`, e.g.:
 docker-compose logs wordpress
 ```
 
+If you want to access the docker container with SSH, you can easily connect to docker by using the below docker command.
+
+```docker exec -it app_container bash```
+
 ### WordPress site
 
 Open `http://mywp.test/` in your browser and follow the famous five-second WordPress install.
