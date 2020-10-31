@@ -34,13 +34,25 @@ specific container, use `docker-compose logs [container]`, e.g.:
 docker-compose logs wordpress
 ```
 
-If you want to access the docker container with SSH, you can easily connect to docker by using the below docker command.
-
-```docker exec -it app_container bash```
-
 ### WordPress site
 
 Open `http://mywp.test/` in your browser and follow the famous five-second WordPress install.
 
 ### PHPMyadmin
 To access the PHPMyadmin visit: `http://mywp.test:8080` and use username as `root`.
+
+### Login to container
+If you want to access the docker container with SSH, you can easily connect to docker by using the below docker command.
+
+```
+docker exec -it app_container bash
+```
+
+### How to run vi on docker container?
+
+After login into container run the following command:
+
+```sh
+apt-get update
+apt-get install vim
+```
