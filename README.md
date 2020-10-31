@@ -56,3 +56,10 @@ After login into container run the following command:
 apt-get update
 apt-get install vim
 ```
+
+### Install WP CLI
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+php wp-cli.phar --info
+chmod +x wp-cli.phar
+mv wp-cli.phar /usr/local/bin/wp
+wp --info

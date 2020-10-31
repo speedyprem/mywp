@@ -25,8 +25,7 @@ services:
       MYSQL_ROOT_PASSWORD: ""
     networks:
       - "back"     
-  # CONTAINER - PHPMYADMIN :
-  # https://hub.docker.com/r/phpmyadmin/phpmyadmin
+  # CONTAINER - PHPMYADMIN: https://hub.docker.com/r/phpmyadmin/phpmyadmin
   phpmyadmin:
     depends_on:
       - mysql
