@@ -39,7 +39,7 @@ docker-compose logs wordpress
 Open `http://mywp.test/` in your browser and follow the famous five-second WordPress install.
 
 ### PHPMyadmin
-To access the PHPMyadmin visit: `http://mywp.test:8080` and use username as `root`.
+To access the PHPMyadmin visit: `http://mywp.test:8080` and use username as `root` and password as blank.
 
 ### Login to container
 If you want to access the docker container with SSH, you can easily connect to docker by using the below docker command.
