@@ -1,4 +1,4 @@
-# Develop plugin or theme with Docker Compose
+# Develop plugin/theme with Docker
 
 It provides WordPress, MariaDB, PHPMyAdmin suite for WordPress development.
 
