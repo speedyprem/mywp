@@ -18,6 +18,7 @@ services:
     - ./wp-content:/var/www/html/wp-content
     working_dir: /var/www/html
   mysql:
+    platform: linux/amd64
     image: "mariadb:10.2"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
