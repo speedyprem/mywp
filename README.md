@@ -64,4 +64,5 @@ php wp-cli.phar --info
 chmod +x wp-cli.phar
 mv wp-cli.phar /usr/local/bin/wp
 wp --info
+wp core install --url=mywp.test --title="WordPress site" --admin_user=admin --admin_password=admin --admin_email=info@mywp.test --allow-root
 ```
