@@ -47,22 +47,3 @@ If you want to access the docker container with SSH, you can easily connect to d
 ```
 docker exec -it app_container bash
 ```
-
-### How to run vi on docker container?
-
-After login into container run the following command:
-
-```sh
-apt-get update
-apt-get install vim
-```
-
-### Install WP CLI
-```
-curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-php wp-cli.phar --info
-chmod +x wp-cli.phar
-mv wp-cli.phar /usr/local/bin/wp
-wp --info
-wp core install --url=mywp.test --title="WordPress site" --admin_user=admin --admin_password=admin --admin_email=info@mywp.test --allow-root
-```
