@@ -1,59 +1,88 @@
-version: "3"
-
+version: "3.7"
 services:
   wordpress:
-    image: "wordpress:${WP_VERSION:-6.3}-php${PHP_VERSION:-8.1}-apache"
-    environment:
-      VIRTUAL_HOST: "${DOCKER_DEV_DOMAIN:-mywp.test}"
-      WORDPRESS_DB_HOST: "mysql"
-      WORDPRESS_DB_NAME: "wordpress"
-      WORDPRESS_DB_PASSWORD: ""
-      WORDPRESS_DB_USER: "root"
-    depends_on:
-      - "mysql"
-    networks:
-      - "front"
-      - "back"
+    image: mywp/wordpress:latest
+    build:
+      context: .
+      dockerfile: docker/wordpress/Dockerfile
     volumes:
-    - ./wp-content:/var/www/html/wp-content
-    working_dir: /var/www/html
-  mysql:
-    platform: linux/amd64
-    image: "mariadb:10.2"
+      - wordpress:/var/www/html
+      - ./:/var/www/html/wp-content
+    env_file: .env
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: "wordpress"
-      MYSQL_ROOT_PASSWORD: ""
-    networks:
-      - "back"     
-  # CONTAINER - PHPMYADMIN: https://hub.docker.com/r/phpmyadmin/phpmyadmin
-  phpmyadmin:
+      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    links:
+      - db
     depends_on:
-      - mysql
-    image: phpmyadmin/phpmyadmin:latest
-    container_name: wp_phpmyadmin
+      - db
+  nginx:
+    image: mywp/nginx:latest
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - wordpress:/var/www/html
+      - ./:/var/www/html/wp-content
+    #      - ./docker/nginx/nginx-selfsigned.conf:/etc/nginx/snippets/self-signed.conf:delegated
+    #      - ./docker/nginx/nginx-ssl-params.conf:/etc/nginx/snippets/ssl-params.conf:delegated
+    #      - ./docker/nginx/dhparam.pem:/etc/ssl/certs/dhparam.pem:delegated
+    #      - ./docker/nginx/crt.pem:/etc/ssl/certs/nginx-selfsigned.crt:delegated
+    #      - ./docker/nginx/key.pem:/etc/ssl/private/nginx-selfsigned.key:delegated
+    #      - ./docker/nginx/conf.d:/etc/nginx/conf.d:delegated
+    links:
+      - wordpress
+  db:
+    image: mariadb:10.6
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - db:/var/lib/mysql
+      - ./db-init:/temp/db-init
+      - ./scripts:/temp/scripts
+  adminer:
+    image: adminer
     restart: always
-    environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: password
     ports:
-      - "8080:80"
-    networks:
-      - back    
-  proxy:
-    image: "jwilder/nginx-proxy:alpine"
-    ports:
-      - "80:80"
-    networks:
-      front:
-        aliases:
-          - "${DOCKER_DEV_DOMAIN:-mywp.test}"
+      - 8080:8080
+  wp-cli:
+    image: mywp/wordpress:latest
+    init: true
+    entrypoint:
+      - init-entrypoint.sh
     volumes:
-      - "/var/run/docker.sock:/tmp/docker.sock:ro"
-
-networks:
-  front: {}
-  back: {}
-
+      - wordpress:/var/www/html/
+      - ./:/var/www/html/wp-content
+      - ~/.composer:/var/cache/composer
+    env_file: .env
+    environment:
+      COMPOSER_HOME: /var/cache/composer
+      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    links:
+      - db
+    depends_on:
+      - db
+  node:
+    image: mywp/node
+    build:
+      context: docker/node
+      dockerfile: Dockerfile
+    init: true
+    volumes:
+      - ./:/var/www/html/wp-content/plugins/nuk-wp-onesignal
+    #      - ./docker/node/entrypoint.sh:/usr/local/bin/entrypoint:delegated
+    depends_on:
+      - wordpress
 volumes:
-  wp: {}
+  db:
+  wordpress:
