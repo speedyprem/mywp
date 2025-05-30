@@ -38,6 +38,10 @@ docker-compose logs wordpress
 
 Open `http://mywp.test/` in your browser and follow the famous five-second WordPress install.
 
+### WordPress Admin Login
+http://mywp.test/wp-admin/
+Use admin/admin as user/password to login.
+
 ### Adminer - Database management
 To access the Adminer visit: `http://mywp.test:8080` and use username as `root` and password as blank.
 
