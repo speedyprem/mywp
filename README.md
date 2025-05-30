@@ -39,7 +39,7 @@ docker-compose logs wordpress
 Open `http://mywp.test/` in your browser and follow the famous five-second WordPress install.
 
 ### WordPress Admin Login
-http://mywp.test/wp-admin/
+Admin Login: [http://mywp.test/wp-admin/](http://mywp.test/wp-admin/) <br>
 Use admin/admin as user/password to login.
 
 ### Adminer - Database management
