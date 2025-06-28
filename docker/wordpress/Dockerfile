@@ -1,4 +1,4 @@
-FROM wordpress:6.7-php8.2-fpm
+FROM wordpress:6.8-php8.2-fpm
 
 RUN apt-get update && apt-get install -y \
     libzip-dev \
