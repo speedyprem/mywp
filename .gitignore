@@ -3,6 +3,7 @@
 # editor code
 .vscode/
 .idea/
+.DS_Store
 
 # wp-content code
 wp-content
