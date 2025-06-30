@@ -4,6 +4,10 @@
 .vscode/
 .idea/
 .DS_Store
+index.php
 
-# wp-content code
-wp-content
+# WordPress core files
+plugins/
+themes/
+uploads/
+
