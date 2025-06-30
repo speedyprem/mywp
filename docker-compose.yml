@@ -7,7 +7,7 @@ services:
       dockerfile: docker/wordpress/Dockerfile
     volumes:
       - wordpress:/var/www/html
-      - ./:/var/www/html/wp-content
+      - ./:/var/www/html/
     env_file: .env
     environment:
       WORDPRESS_DB_HOST: ${DB_HOST}
@@ -28,13 +28,7 @@ services:
       - 443:443
     volumes:
       - wordpress:/var/www/html
-      - ./:/var/www/html/wp-content
-    #      - ./docker/nginx/nginx-selfsigned.conf:/etc/nginx/snippets/self-signed.conf:delegated
-    #      - ./docker/nginx/nginx-ssl-params.conf:/etc/nginx/snippets/ssl-params.conf:delegated
-    #      - ./docker/nginx/dhparam.pem:/etc/ssl/certs/dhparam.pem:delegated
-    #      - ./docker/nginx/crt.pem:/etc/ssl/certs/nginx-selfsigned.crt:delegated
-    #      - ./docker/nginx/key.pem:/etc/ssl/private/nginx-selfsigned.key:delegated
-    #      - ./docker/nginx/conf.d:/etc/nginx/conf.d:delegated
+      - ./:/var/www/html/
     links:
       - wordpress
   db:
@@ -72,17 +66,6 @@ services:
       - db
     depends_on:
       - db
-  node:
-    image: mywp/node
-    build:
-      context: docker/node
-      dockerfile: Dockerfile
-    init: true
-    volumes:
-      - ./:/var/www/html/wp-content/plugins/nuk-wp-onesignal
-    #      - ./docker/node/entrypoint.sh:/usr/local/bin/entrypoint:delegated
-    depends_on:
-      - wordpress
 volumes:
   db:
   wordpress:
