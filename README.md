@@ -45,7 +45,7 @@ Use admin/admin as user/password to login.
 ### Adminer - Database management
 To access the Adminer visit: `http://mywp.test:8080` and use username as `root` and password as blank.
 
-### Runt the below command to login into the docker container
+### Run the below command to login into the docker container
 If you want to access the docker container with SSH, you can easily connect to docker by using the below docker command.
 
 ```
