@@ -1,8 +1,8 @@
-# Develop plugin or theme with Docker
+# Develop WordPress plugin and theme
 
-It provides WordPress, MariaDB, PHPMyAdmin suite for WordPress development.
+It provides WordPress, MariaDB, PHP, nginx‎, and PHPMyAdmin suite for WordPress development.
 
-## Set-up
+## Setup the local environments
 
 1. Clone or fork this repository.
 
