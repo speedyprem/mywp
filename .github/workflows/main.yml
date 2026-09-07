@@ -59,12 +59,10 @@ jobs:
         # If your ruleset file is named differently (e.g. phpcs.xml, or a
         # specific standard like PSR12), adjust the --standard argument.
 
-      - name: Build project
-        run: npm run build
-        # Adjust the build command above if you use yarn/pnpm, e.g.:
-        # run: yarn build
-        # run: pnpm build
+  create-built-branch:   # Added a descriptive key for the deployment step sequence
+    runs-on: ubuntu-latest
 
+    steps:
       - name: Deploy build output to master-built branch
         uses: JamesIves/github-pages-deploy-action@v4
         with:
