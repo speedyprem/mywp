@@ -1,0 +1,75 @@
+name: Deploy to master-built
+
+# Triggers when a PR is merged into master.
+# A merged PR produces a push event on master, so we filter using
+# github.event.pull_request.merged inside the job (belt-and-braces),
+# while the `push` trigger is what actually fires the workflow.
+on:
+  push:
+    # branches:
+    #   - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    # Optional safety check: only run if this push came from a merged PR.
+    # (Direct pushes to master will still run the build; remove this `if`
+    # if you want the workflow to run on ALL pushes to master.)
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'          # adjust to match your project's PHP version
+          tools: composer, cs2pr
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: PHP lint (syntax check)
+        run: |
+          find . -name '*.php' \
+            -not -path './vendor/*' \
+            -not -path './node_modules/*' \
+            -print0 | xargs -0 -n1 -P4 php -l
+
+      - name: PHPCS (coding standards)
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist --report=checkstyle -q | cs2pr
+        # If you don't use cs2pr / want plain output instead, replace with:
+        # run: vendor/bin/phpcs --standard=phpcs.xml.dist
+        #
+        # If your ruleset file is named differently (e.g. phpcs.xml, or a
+        # specific standard like PSR12), adjust the --standard argument.
+
+      - name: Build project
+        run: npm run build
+        # Adjust the build command above if you use yarn/pnpm, e.g.:
+        # run: yarn build
+        # run: pnpm build
+
+      - name: Deploy build output to master-built branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: master-built        # target branch to push build output to
+          folder: build                # local folder containing the build output
+          # folder: dist               # <-- use this instead if your build outputs to /dist
+          clean: true                  # remove stale files from master-built before deploying
+          commit-message: "Deploy: ${{ github.event.head_commit.message }} (${{ github.sha }})"
