@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="The-Sun">
+<ruleset name="Mywp">
 	<description>Sniffs for the coding standards of The Sun.</description>
 
 	<!-- Scanning preferences -->
