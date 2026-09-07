@@ -1,4 +1,4 @@
-name: Deploy to master-built
+name: Build and Deploy
 
 # Triggers when a PR is merged into master.
 # A merged PR produces a push event on master, so we filter using
@@ -10,7 +10,7 @@ on:
     #   - master
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     # Optional safety check: only run if this push came from a merged PR.
@@ -61,6 +61,7 @@ jobs:
 
   create-built-branch:   # Added a descriptive key for the deployment step sequence
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
       - name: Deploy build output to master-built branch
