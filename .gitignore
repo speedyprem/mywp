@@ -4,10 +4,11 @@
 .vscode/
 .idea/
 .DS_Store
+node_modules/
+vendor/
 index.php
 
 # WordPress core files
 plugins/
 themes/
 uploads/
-
