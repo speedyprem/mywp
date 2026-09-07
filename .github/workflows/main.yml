@@ -59,7 +59,7 @@ jobs:
     needs: build
     steps:
       - name: PHPCS (coding standards)
-        run: vendor/bin/phpcs --standard=phpcs.xml.dist --report=checkstyle -q | cs2pr
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist
         # If you don't use cs2pr / want plain output instead, replace with:
         # run: vendor/bin/phpcs --standard=phpcs.xml.dist
         #
