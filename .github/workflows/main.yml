@@ -68,7 +68,7 @@ jobs:
 
   create-built-branch:   # Added a descriptive key for the deployment step sequence
     runs-on: ubuntu-latest
-    needs: build
+    needs: phpcs, php-lint
 
     steps:
       - name: Deploy build output to "<base-branch>-built" branch
