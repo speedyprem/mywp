@@ -5,6 +5,7 @@ on: push
 jobs:
   php-lint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -12,10 +13,10 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'          # adjust to match your project's PHP version
+          php-version: '8.4'
           coverage: none
 
-      - name: PHP lint (syntax check)
+      - name: PHP lint
         run: |
           find . -name '*.php' \
             -not -path './vendor/*' \
@@ -24,6 +25,7 @@ jobs:
 
   phpcs:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -38,34 +40,26 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-progress --prefer-dist
 
-      - name: PHPCS (coding standards)
+      - name: PHPCS
         run: vendor/bin/phpcs --standard=phpcs.xml.dist
 
-  # Equivalent of CircleCI's:
-  #   - approve-production:
-  #       type: approval
-  #       requires:
-  #         - build-staging
-  #
-  # This job does nothing on its own — it just sits behind the
-  # "production-approval" environment's required reviewers. GitHub
-  # pauses it (status: "Waiting") until someone approves it from the
-  # Actions run page. Downstream jobs "need" this one, so they can't
-  # start until it's approved.
   approve-production:
-    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+
     needs:
       - phpcs
       - php-lint
+
     environment:
       name: production-approval
+
     steps:
-      - name: Waiting
+      - name: Waiting for approval
         run: echo "Deployment approved — proceeding to create-built-branch."
 
   create-built-branch:
     runs-on: ubuntu-latest
+
     needs:
       - approve-production
 
@@ -87,9 +81,10 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
-      - name: Prepare code for sync (exclude .git and dependency folders)
+      - name: Prepare code for sync
         run: |
           mkdir -p /tmp/sync-output
+
           rsync -av \
             --exclude='.git' \
             --exclude='node_modules' \
@@ -97,10 +92,10 @@ jobs:
             --exclude='.gitignore' \
             ./ /tmp/sync-output/
 
-      - name: Deploy build output to "<base-branch>-built" branch
+      - name: Deploy build output to built branch
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: ${{ github.ref_name }}-built        # target branch to push build output to
-          folder: /tmp/sync-output      # synced copy of the full repo, no build step
-          clean: true                  # remove stale files from the built branch before deploying
+          branch: ${{ github.ref_name }}-built
+          folder: /tmp/sync-output
+          clean: true
           commit-message: "Deploy: ${{ github.event.head_commit.message }} (${{ github.sha }})"
