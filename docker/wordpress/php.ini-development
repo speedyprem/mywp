@@ -1,0 +1,11 @@
+display_errors=On
+error_reporting=E_ALL & ~E_WARNING & ~E_NOTICE & ~E_DEPRECATED
+opcache.memory_consumption=256
+opcache.max_accelerated_files=20000
+realpath_cache_size=4096K
+realpath_cache_ttl=600
+cgi.fix_pathinfo=1
+log_errors = On
+error_log = /dev/stderr
+upload_max_filesize = 8M
+post_max_size = 8M

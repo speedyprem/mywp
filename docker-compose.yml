@@ -1,0 +1,77 @@
+version: "3.7"
+services:
+  wordpress:
+    image: mywp/wordpress:latest
+    build:
+      context: .
+      dockerfile: docker/wordpress/Dockerfile
+    volumes:
+      - wordpress:/var/www/html
+      - ./:/var/www/html/wp-content
+    env_file: .env
+    environment:
+      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    links:
+      - db
+    depends_on:
+      - db
+  nginx:
+    image: mywp/nginx:latest
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - wordpress:/var/www/html
+      - ./:/var/www/html/wp-content
+    #      - ./docker/nginx/nginx-selfsigned.conf:/etc/nginx/snippets/self-signed.conf:delegated
+    #      - ./docker/nginx/nginx-ssl-params.conf:/etc/nginx/snippets/ssl-params.conf:delegated
+    #      - ./docker/nginx/dhparam.pem:/etc/ssl/certs/dhparam.pem:delegated
+    #      - ./docker/nginx/crt.pem:/etc/ssl/certs/nginx-selfsigned.crt:delegated
+    #      - ./docker/nginx/key.pem:/etc/ssl/private/nginx-selfsigned.key:delegated
+    #      - ./docker/nginx/conf.d:/etc/nginx/conf.d:delegated
+    links:
+      - wordpress
+  db:
+    image: mariadb:10.6
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - db:/var/lib/mysql
+      - ./db-init:/temp/db-init
+      - ./scripts:/temp/scripts
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  wp-cli:
+    image: mywp/wordpress:latest
+    init: true
+    entrypoint:
+      - init-entrypoint.sh
+    volumes:
+      - wordpress:/var/www/html/
+      - ./:/var/www/html/wp-content
+      - ~/.composer:/var/cache/composer
+    env_file: .env
+    environment:
+      COMPOSER_HOME: /var/cache/composer
+      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    links:
+      - db
+    depends_on:
+      - db
+volumes:
+  db:
+  wordpress:
