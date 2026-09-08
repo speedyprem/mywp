@@ -1,10 +1,5 @@
 name: Build and Deploy
 
-on:
-  push:
-    branches:
-      - /.*-built/
-
 jobs:
   php-lint:
     runs-on: ubuntu-latest
