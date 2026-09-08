@@ -68,7 +68,7 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
-       - name: Prepare code for sync (exclude .git and dependency folders)
+      - name: Prepare code for sync (exclude .git and dependency folders)
         run: |
           mkdir -p /tmp/sync-output
           rsync -av \
@@ -76,11 +76,6 @@ jobs:
             --exclude='node_modules' \
             --exclude='vendor' \
             ./ /tmp/sync-output/
-        # This copies the full repo as-is (no build step) into a temp folder,
-        # leaving out .git and installed dependencies so they don't get
-        # committed into the "<base-branch>-built" branch. Add more
-        # --exclude entries here for anything else you don't want synced
-        # (e.g. --exclude='.env', --exclude='tests').
  
       - name: Deploy build output to "<base-branch>-built" branch
         uses: JamesIves/github-pages-deploy-action@v4
