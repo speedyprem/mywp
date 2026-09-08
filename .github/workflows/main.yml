@@ -2,8 +2,8 @@ name: Build and Deploy
 
 on:
   push:
-    # branches:
-    #   - master        # equivalent to CircleCI's "filters: branches: only: - master"
+    branches:
+      - master        # equivalent to CircleCI's "filters: branches: only: - master"
 
 jobs:
   php-lint:
