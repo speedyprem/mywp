@@ -73,5 +73,6 @@ jobs:
         with:
           branch: ${{ github.ref_name }}-built        # target branch to push build output to
           folder: build                # local folder containing the build output
+          # folder: dist               # <-- use this instead if your build outputs to /dist
           clean: true                  # remove stale files from the built branch before deploying
           commit-message: "Deploy: ${{ github.event.head_commit.message }} (${{ github.sha }})"
