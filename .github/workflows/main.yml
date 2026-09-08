@@ -16,7 +16,7 @@ jobs:
           php-version: '8.4'
           coverage: none
 
-      - name: PHP lint (syntax check)
+      - name: PHP lint
         run: |
           find . -name '*.php' \
             -not -path './vendor/*' \
@@ -40,7 +40,7 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-progress --prefer-dist
 
-      - name: PHPCS (coding standards)
+      - name: PHPCS
         run: vendor/bin/phpcs --standard=phpcs.xml.dist
 
   approve-production:
