@@ -63,7 +63,7 @@ jobs:
     environment:
       name: production-approval
     steps:
-      - name: Approved
+      - name: Waiting
         run: echo "Deployment approved — proceeding to create-built-branch."
 
   create-built-branch:
