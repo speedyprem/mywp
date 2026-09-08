@@ -3,7 +3,15 @@ name: Build and Deploy
 on:
   push:
     # branches:
-    #   - master        # equivalent to CircleCI's "filters: branches: only: - master"
+    #   - master        # runs php-lint + phpcs automatically on every push/merge to master
+
+  # Manual approval gate: create-built-branch only runs when someone
+  # clicks "Run workflow" on this workflow in the Actions tab, on the
+  # branch they want to deploy. That manual click IS the approval —
+  # this works on GitHub Free/Pro/Team for private repos, unlike
+  # environment "required reviewers" (which is Enterprise-only for
+  # private repos).
+  workflow_dispatch: {}
 
 jobs:
   php-lint:
@@ -44,32 +52,16 @@ jobs:
       - name: PHPCS (coding standards)
         run: vendor/bin/phpcs --standard=phpcs.xml.dist
 
-  # Equivalent of CircleCI's:
-  #   - approve-production:
-  #       type: approval
-  #       requires:
-  #         - build-staging
-  #
-  # This job does nothing on its own — it just sits behind the
-  # "production-approval" environment's required reviewers. GitHub
-  # pauses it (status: "Waiting") until someone approves it from the
-  # Actions run page. Downstream jobs "need" this one, so they can't
-  # start until it's approved.
-  approve-production:
+  create-built-branch:
     runs-on: ubuntu-latest
     needs:
       - phpcs
       - php-lint
-    environment:
-      name: production-approval
-    steps:
-      - name: Waiting
-        run: echo "Deployment approved — proceeding to create-built-branch."
 
-  create-built-branch:
-    runs-on: ubuntu-latest
-    needs:
-      - approve-production
+    # Only runs on a manual "Run workflow" click (workflow_dispatch).
+    # On a normal push, this job is skipped — lint/phpcs still run,
+    # but nothing gets deployed until someone triggers it by hand.
+    if: github.event_name == 'workflow_dispatch'
 
     permissions:
       contents: write
@@ -105,4 +97,4 @@ jobs:
           branch: ${{ github.ref_name }}-built        # target branch to push build output to
           folder: /tmp/sync-output      # synced copy of the full repo, no build step
           clean: true                  # remove stale files from the built branch before deploying
-          commit-message: "Deploy: ${{ github.event.head_commit.message }} (${{ github.sha }})"
+          commit-message: "Deploy: ${{ github.event_name == 'push' && github.event.head_commit.message || format('manual deploy by {0}', github.actor) }} (${{ github.sha }})"
