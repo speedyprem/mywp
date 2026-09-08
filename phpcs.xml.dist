@@ -29,11 +29,6 @@
 	<!-- Rules: VIP Coding Standards - see https://github.com/Automattic/VIP-Coding-Standards -->
 	<rule ref="WordPress-VIP-Go"/>
 
-	<!-- Don't report minified files that are not named *.min.* -->
-	<rule ref="Internal.Tokenizer.Exception">
-		<severity>0</severity>
-	</rule>
-
 	<!-- Don't report .php files with no PHP in them -->
 	<rule ref="Internal.NoCodeFound">
 		<severity>0</severity>
