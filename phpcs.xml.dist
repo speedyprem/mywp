@@ -29,14 +29,6 @@
 	<!-- Rules: VIP Coding Standards - see https://github.com/Automattic/VIP-Coding-Standards -->
 	<rule ref="WordPress-VIP-Go"/>
 
-	<!-- Don't report the short array issue, as this is fine for VIP env -->
-	<rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
-		<severity>0</severity>
-	</rule>
-	<rule ref="Universal.Arrays.DisallowShortArraySyntax.Found">
-		<severity>0</severity>
-	</rule>
-
 	<!-- Don't report minified files that are not named *.min.* -->
 	<rule ref="Internal.Tokenizer.Exception">
 		<severity>0</severity>
