@@ -55,19 +55,16 @@ jobs:
   # pauses it (status: "Waiting") until someone approves it from the
   # Actions run page. Downstream jobs "need" this one, so they can't
   # start until it's approved.
-approve-production:
-  runs-on: ubuntu-latest
-
-  needs:
-    - phpcs
-    - php-lint
-
-  environment:
-    name: production-approval
-
-  steps:
-    - name: Approved
-      run: echo "Deployment approved — proceeding to create-built-branch."
+  approve-production:
+    runs-on: ubuntu-latest
+    needs:
+      - phpcs
+      - php-lint
+    environment:
+      name: production-approval
+    steps:
+      - name: Waiting
+        run: echo "Deployment approved — proceeding to create-built-branch."
 
   create-built-branch:
     runs-on: ubuntu-latest
