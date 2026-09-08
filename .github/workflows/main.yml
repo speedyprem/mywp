@@ -2,8 +2,8 @@ name: Build and Deploy
 
 on:
   push:
-    # branches:
-    #   - master        # runs php-lint + phpcs automatically on every push/merge to master
+    branches:
+      - master
 
   # Manual approval gate: create-built-branch only runs when someone
   # clicks "Run workflow" on this workflow in the Actions tab, on the
