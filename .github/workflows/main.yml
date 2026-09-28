@@ -1,6 +1,7 @@
-name: Build and Deploy
+name: Build Test and Lint
 
-on: push
+on:
+  push:
 
 jobs:
   php-lint:
@@ -43,59 +44,3 @@ jobs:
       - name: PHPCS
         run: vendor/bin/phpcs --standard=phpcs.xml.dist
 
-  approve-production:
-    runs-on: ubuntu-latest
-
-    needs:
-      - phpcs
-      - php-lint
-
-    environment:
-      name: production-approval
-
-    steps:
-      - name: Waiting for approval
-        run: echo "Deployment approved — proceeding to create-built-branch."
-
-  create-built-branch:
-    runs-on: ubuntu-latest
-
-    needs:
-      - approve-production
-
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: '24'
-          cache: 'npm'
-
-      - name: Install Node dependencies
-        run: npm ci
-
-      - name: Prepare code for sync
-        run: |
-          mkdir -p /tmp/sync-output
-
-          rsync -av \
-            --exclude='.git' \
-            --exclude='node_modules' \
-            --exclude='vendor' \
-            --exclude='.gitignore' \
-            ./ /tmp/sync-output/
-
-      - name: Deploy build output to built branch
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: ${{ github.ref_name }}-built
-          folder: /tmp/sync-output
-          clean: true
-          commit-message: "Deploy: ${{ github.event.head_commit.message }} (${{ github.sha }})"
