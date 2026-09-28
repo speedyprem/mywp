@@ -44,7 +44,6 @@ jobs:
 
       - name: PHPCS
         run: vendor/bin/phpcs --standard=phpcs.xml.dist
-
   find-merged-pr:
     runs-on: ubuntu-latest
 
@@ -79,8 +78,8 @@ jobs:
     if: needs.find-merged-pr.outputs.is-merged-pr == 'true'
 
     needs:
-      - phpcs
       - php-lint
+      - phpcs
       - find-merged-pr
 
     environment:
