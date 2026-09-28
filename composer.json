@@ -1,5 +1,5 @@
 {
-    "name": "your-vendor/your-project-name",
+    "name": "speedyprem/myqp",
     "description": "Project deployed via GitHub Actions to the master-built branch",
     "type": "project",
     "license": "MIT",

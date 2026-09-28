@@ -1,6 +1,6 @@
 # Develop WordPress plugin and theme
 
-It provides WordPress, MariaDB, PHP, nginx‎, and PHPMyAdmin suite for WordPress development.
+It provides WordPress, MariaDB, PHP, nginx, and PHPMyAdmin suite for WordPress development.
 
 ## Setup the local environments
 

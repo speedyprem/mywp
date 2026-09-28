@@ -1,5 +1,5 @@
 {
-  "name": "your-project-name",
+  "name": "MyWP local setup for WordPress plugin and theme development",
   "version": "1.0.0",
   "description": "Project deployed via GitHub Actions to the master-built branch",
   "private": true,
